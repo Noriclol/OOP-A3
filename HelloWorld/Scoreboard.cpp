@@ -140,11 +140,23 @@ unsigned int* DynamicArray::Load() // runs on Restart. Loads Array stored in sco
 	}
 	file.close();
 
+	file.clear();
 
 	file.open("Scores.txt");
-
+	
 	int count = 1;
 	unsigned int* arr = new unsigned int[length];
+
+	arr[0] = 1;
+	arr[1] = 2;
+	arr[2] = 3;
+
+	for (unsigned int i = 0; i < length; i++)
+	{
+		//auto line = std::getline(file, line, ',');
+		//unsigned int n = stoi()
+		//arr[i] = std::getline(file, line, ',');
+	}
 
 	for (string line; std::getline(file, line, ',');)
 	{
