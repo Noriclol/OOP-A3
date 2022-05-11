@@ -1,6 +1,8 @@
 #pragma once
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include <string>
+#include <algorithm>
 
 #include "Constants.h"
 
@@ -36,27 +38,29 @@ public:
 class DynamicArray{
 
 public:
-	int size = 5;
 	unsigned int* scores;
+	int filelength;
+	string filename = "Scores.txt"; //change to scoreboard.txt
 
 	DynamicArray();
 	~DynamicArray();
 
 	void Add(unsigned int n);
-	unsigned int* Sort(unsigned int input[], int size);
-
-	void display();
+	void Sort();
+	void Display();
 
 private:
-	unsigned int* Load();
+
+	unsigned int GetFileLength(string filename);
+	void Load();
 	void Save();
+
 };
 
 class Scoreboard {
 public:
 	//Fields
-	Stack board;
-	DynamicArray board2 = DynamicArray();
+	DynamicArray board = DynamicArray();
 
 	unsigned int currentScore = 0;
 

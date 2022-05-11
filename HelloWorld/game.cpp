@@ -204,34 +204,30 @@ bool Game::BallCollision(Paddle& paddle, Scoreboard& board)
 
 void Game::GameOver(Scoreboard& score) {
 
-
-	//is score new
 	unsigned int newscore = score.currentScore;
 	score.currentScore = 0;
+
 	bool isNew = true;
-	for (unsigned int i = 0; i < sizeof(score.board.n); i++)
+	//does score exist in 
+	for (unsigned int i = 0; i < score.board.filelength; i++)
 	{
-		if (score.board.stack[i] == newscore)
+		if (score.board.scores[i] == newscore)
 		{
 			isNew = false;
 		}
 	}
-
+	//is score 0;
 	if (newscore == 0)
 	{
 		isNew = false;
 	}
 
-
+	//if score is new
 	if (isNew)
 	{
-		//push new score
-		score.board.Push(newscore);
-
-		//sort Scoreboard
-		Stack input = score.board;
-		Stack tmpStack = score.SortScoreboard(input);
-		score.board = tmpStack;
+		//add and sort new score
+		score.board.Add(newscore);
+		score.board.Sort();
 
 	}
 }
@@ -264,93 +260,5 @@ void Game::HandleInput(Paddle& paddle)
 		else {
 			//Play::DrawDebugText(Point2D(DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2), "Corner!");
 		}
-
 	}
 }
-
-//bool Game::StepFrame(float timeSinceStart, Scoreboard& score)
-//{
-//	//Collect gameobjects
-//	std::vector<int> ballIds = Play::CollectGameObjectIDsByType(Type_Ball);
-//	std::vector<int> brickIds = Play::CollectGameObjectIDsByType(Type_Brick);
-//
-//	//Draw/Update Ball
-//	for (int i = 0; i < ballIds.size(); i++)
-//	{
-//		GameObject& ball = Play::GetGameObject(ballIds[i]);
-//
-//		float velocityX = ball.velocity.x;
-//		float velocityY = ball.velocity.y;
-//		float positionX = ball.pos.x;
-//		float positionY = ball.pos.y;
-//
-//		if (positionX < 0)
-//		{
-//			Play::GetGameObject(ballIds[i]).velocity.x = BALL_SPEED;
-//
-//		}
-//		if (positionY < 0)
-//		{
-//			Play::GetGameObject(ballIds[i]).velocity.y = BALL_SPEED;
-//		}
-//
-//		if (positionX > DISPLAY_WIDTH)
-//		{
-//			Play::GetGameObject(ballIds[i]).velocity.x = -BALL_SPEED;
-//
-//		}
-//		if (positionY > DISPLAY_HEIGHT)
-//		{
-//			//Game over
-//			Game::GameOver(score);
-//			//Reset Scene
-//			return true;
-//		}
-//
-//		//If Border Hit
-//		//ball.velocity.x = (ball.velocity.x < 0) ? BALL_SPEED : -BALL_SPEED;
-//		//ball.velocity.y = (ball.velocity.y < 0) ? BALL_SPEED : -BALL_SPEED;
-//
-//		Play::UpdateGameObject(Play::GetGameObject(ballIds[i]));
-//		Play::DrawObject(Play::GetGameObject(ballIds[i]));
-//	}
-//
-//	//Check for collisions between ball and bricks
-//	for (int i = 0; i < ballIds.size(); i++) {
-//		for (int j = 0; j < brickIds.size(); j++)
-//		{
-//			GameObject& ball = Play::GetGameObject(ballIds[i]);
-//			GameObject& brick = Play::GetGameObject(brickIds[j]);
-//
-//			if (Play::IsColliding(ball, brick)) {
-//				Play::DestroyGameObject(brickIds[j]);
-//
-//				score.Score(1);
-//
-//				ball.velocity.x = (ball.velocity.x < 0) ? BALL_SPEED : -BALL_SPEED;
-//				ball.velocity.y = (ball.velocity.y < 0) ? BALL_SPEED : -BALL_SPEED;
-//				
-//			}
-//		}
-//
-//	}
-//
-//
-//	//Render Bricks
-//	for (int i = 0; i < brickIds.size(); i++)
-//	{
-//
-//
-//
-//		Play::UpdateGameObject(Play::GetGameObject(brickIds[i]));
-//		Play::DrawObject(Play::GetGameObject(brickIds[i]));
-//	}
-//
-//
-//	return false;
-//}
-
-
-
-
-

@@ -1,10 +1,4 @@
 #include "Scoreboard.h"
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <algorithm>
-#include "string"
-#include  <iostream>
 
 // implemented stack from https://www.codespeedy.com/stack-implementation-using-array-in-c/
 // implemented stack sort from https://www.geeksforgeeks.org/sort-stack-using-temporary-stack/
@@ -51,152 +45,126 @@ bool Stack::Empty() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //DynamicArray
 
 DynamicArray::DynamicArray()
 {
-	//load scoreboard
-	unsigned int* data = Load();
-	//make new score array size of loaded data
-	scores = new unsigned int[sizeof(data)];
 
-	unsigned int first;
+	//Get filelength to use for array
 
-	/*memcpy(scores, data, sizeof(scores) * sizeof(unsigned int));
+	filelength = (int)GetFileLength(filename);
 
-	size = sizeof(scores) / sizeof(unsigned int);
+	//set scores length
+	scores = new unsigned int[filelength];
 
-	delete[] data;*/
-	
+	Load();
 }
 
 DynamicArray::~DynamicArray()
 {
-	////save scoreboard
-	//
-	//delete[] scores;
+	Save();
+	delete[] scores;
 }
 
 void DynamicArray::Add(unsigned int n)
 {
+	unsigned int newlength = filelength + 1;
+	unsigned int* newscores = new unsigned int[newlength];
 
-	//unsigned int oldsize = sizeof(scores);
-	//unsigned int newsize = oldsize + 1;
+	//copy contents from old arr to new
+	memcpy(newscores, scores, filelength * sizeof(unsigned int));
 
-	//unsigned int* newscores = new unsigned int[newsize];
+	//add new number
+	newscores[newlength - 1] = n;
 
-	////copy contents from old arr to new
-	//memcpy(newscores, scores, oldsize * sizeof(unsigned int));
 
-	////clear old dynamic array
-	//delete[] scores;
+	//clear old dynamic array
+	delete[] scores;
 
-	////set size and pointer to created array
-	//size = newsize;
-	//scores = newscores;
-	//
+	//set size and pointer to created array
+	filelength = newlength;
+	scores = newscores;
+
 }
 
-unsigned int* DynamicArray::Sort(unsigned int input[], int size)
+void DynamicArray::Sort()
 {
-	/*std::sort(input[0], input[size - 1], std::greater<int>());
-	return input;*/
-	return 0;
+	int temp;
+
+	for (int i = 0; i < filelength - 1; i++) {
+		for (int j = i + 1; j < filelength; j++) {
+
+			if (scores[i] < scores[j]) {
+
+				temp = scores[j];
+
+				scores[j] = scores[i];
+
+				scores[i] = temp;
+
+			}
+		}
+	}
 }
 
-void DynamicArray::display()
+void DynamicArray::Display()
 {
-	/*for (int i = 0; i < size; ++i)
-		cout << scores[i] << " ";*/
+	for (int i = 0; i < filelength; ++i)
+		cout << to_string(scores[i]) << " ";
+
+	cout << endl;
 }
 
-unsigned int* DynamicArray::Load() // runs on Restart. Loads Array stored in scores.txt
+unsigned int DynamicArray::GetFileLength(string filename)
 {
 	ifstream file;
-
-	file.open("Scores.txt");
-
-	unsigned int length = 0;
-	for (string line; std::getline(file, line); ) 
+	file.open(filename);
+	unsigned int length = 0; {};
+	for (string line; std::getline(file, line); )
 	{
 		length++;
 	}
 	file.close();
+	return length;
+}
 
-	file.clear();
 
-	file.open("Scores.txt");
-	
-	int count = 1;
-	unsigned int* arr = new unsigned int[length];
+void DynamicArray::Load() // runs on Restart. Loads Array stored in scores.txt
+{
+	ifstream file;
 
-	arr[0] = 1;
-	arr[1] = 2;
-	arr[2] = 3;
 
-	for (unsigned int i = 0; i < length; i++)
+	file.open(filename);
+
+	int count = 0;
+	for (string line; std::getline(file, line);)
 	{
-		//auto line = std::getline(file, line, ',');
-		//unsigned int n = stoi()
-		//arr[i] = std::getline(file, line, ',');
-	}
+		if (!(count <= filelength))
+			return;
 
-	for (string line; std::getline(file, line, ',');)
-	{
-		unsigned int n = stoi(line);
-		arr[count - 1] = n;
-		unsigned int currentAdded = arr[count - 1];
+		const unsigned int n = stoi(line);
+		scores[count] = n;
 		count++;
 	}
-		
-	
+
 	file.close();
-
-
-	return arr;
 }
 
 void DynamicArray::Save() // Runs on Game Over
 {
-	/*ofstream file;
-	file.open("Scores.txt");
-	for (unsigned int i = 0; i < size; i++)
+	ofstream file;
+	char ch = ',';
+	file.open(filename, ios::out | ios::trunc);
+
+	for (int i = 0; i < filelength; i++)
 	{
-		unsigned int line = scores[i];
+		unsigned int x = scores[i];
+		string line = to_string(x);
+		line += ch;
 		file << line << endl;
 	}
-	file.close();*/
+	file.close();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

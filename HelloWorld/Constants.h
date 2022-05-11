@@ -3,7 +3,7 @@
 //Display
 const int DISPLAY_WIDTH = 320;
 const int DISPLAY_HEIGHT = 480;
-const int DISPLAY_SCALE = 1;
+const int DISPLAY_SCALE = 2;
 const int DISPLAY_WIDTH_CENTER = DISPLAY_WIDTH / 2;
 const int DISPLAY_HEIGHT_CENTER = DISPLAY_HEIGHT / 2;
 

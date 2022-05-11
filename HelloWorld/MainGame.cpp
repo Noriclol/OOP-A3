@@ -12,41 +12,40 @@ Scoreboard scoreboard;
 GameState state = State_Restart;
 
 void DrawScoreboard() {
+	int Xoffset = 100, Yoffset = 80, rowSpace = 30;
+	int ScoresShown = 5;
+	Play::DrawDebugText(Point2D((DISPLAY_WIDTH / 2) - Xoffset, (DISPLAY_HEIGHT / 2) + Yoffset), "HighScores");
 
-	string str0 = to_string(scoreboard.board.stack[0]);
-	string str1 = to_string(scoreboard.board.stack[1]);
-	string str2 = to_string(scoreboard.board.stack[2]);
-	string str3 = to_string(scoreboard.board.stack[3]);
-	string str4 = to_string(scoreboard.board.stack[4]);
-
-	Play::DrawDebugText(Point2D((DISPLAY_WIDTH / 2) - 100, h + 100 + (DISPLAY_HEIGHT / 2)), "Highscores:");
-	Play::DrawDebugText(Point2D((DISPLAY_WIDTH / 2) - 100, h + 120 + (DISPLAY_HEIGHT / 2)), str0.c_str());
-	Play::DrawDebugText(Point2D((DISPLAY_WIDTH / 2) - 100, h + 140 + (DISPLAY_HEIGHT / 2)), str1.c_str());
-	Play::DrawDebugText(Point2D((DISPLAY_WIDTH / 2) - 100, h + 160 + (DISPLAY_HEIGHT / 2)), str2.c_str());
-	Play::DrawDebugText(Point2D((DISPLAY_WIDTH / 2) - 100, h + 180 + (DISPLAY_HEIGHT / 2)), str3.c_str());
-	Play::DrawDebugText(Point2D((DISPLAY_WIDTH / 2) - 100, h + 200 + (DISPLAY_HEIGHT / 2)), str4.c_str());
-
+	for (int i = 0; i <= ScoresShown; i++)
+	{
+		string line = to_string(0);;
+		if (i < scoreboard.board.filelength)
+		{
+			line = to_string(scoreboard.board.scores[i]);
+		}
+		Play::DrawDebugText(Point2D((DISPLAY_WIDTH / 2) - Xoffset, (DISPLAY_HEIGHT / 2) + Yoffset + (rowSpace * (i + 1)) ), line.c_str());
+	}
 }
 
 void DrawDebugBoard() {
 
-	string top = "top: " + to_string(scoreboard.board.top);
+	//string top = "top: " + to_string(scoreboard.board.top);
 
-	string str0 = "n0:" + to_string(scoreboard.board.stack[0]);
-	string str1 = "n1:" + to_string(scoreboard.board.stack[1]);
-	string str2 = "n2:" + to_string(scoreboard.board.stack[2]);
-	string str3 = "n3:" + to_string(scoreboard.board.stack[3]);
-	string str4 = "n4:" + to_string(scoreboard.board.stack[4]);
+	//string str0 = "n0:" + to_string(scoreboard.board.stack[0]);
+	//string str1 = "n1:" + to_string(scoreboard.board.stack[1]);
+	//string str2 = "n2:" + to_string(scoreboard.board.stack[2]);
+	//string str3 = "n3:" + to_string(scoreboard.board.stack[3]);
+	//string str4 = "n4:" + to_string(scoreboard.board.stack[4]);
 
-	Play::DrawDebugText(Point2D((DISPLAY_WIDTH / 2) - 100, h + 80 + (DISPLAY_HEIGHT / 2)), "DebugBoard:");
+	//Play::DrawDebugText(Point2D((DISPLAY_WIDTH / 2) - 100, h + 80 + (DISPLAY_HEIGHT / 2)), "DebugBoard:");
 
-	Play::DrawDebugText(Point2D((DISPLAY_WIDTH / 2) - 100, h + 100 + (DISPLAY_HEIGHT / 2)), top.c_str());
+	//Play::DrawDebugText(Point2D((DISPLAY_WIDTH / 2) - 100, h + 100 + (DISPLAY_HEIGHT / 2)), top.c_str());
 
-	Play::DrawDebugText(Point2D((DISPLAY_WIDTH / 2) - 100, h + 120 + (DISPLAY_HEIGHT / 2)), str0.c_str());
-	Play::DrawDebugText(Point2D((DISPLAY_WIDTH / 2) - 100, h + 140 + (DISPLAY_HEIGHT / 2)), str1.c_str());
-	Play::DrawDebugText(Point2D((DISPLAY_WIDTH / 2) - 100, h + 160 + (DISPLAY_HEIGHT / 2)), str2.c_str());
-	Play::DrawDebugText(Point2D((DISPLAY_WIDTH / 2) - 100, h + 180 + (DISPLAY_HEIGHT / 2)), str3.c_str());
-	Play::DrawDebugText(Point2D((DISPLAY_WIDTH / 2) - 100, h + 200 + (DISPLAY_HEIGHT / 2)), str4.c_str());
+	//Play::DrawDebugText(Point2D((DISPLAY_WIDTH / 2) - 100, h + 120 + (DISPLAY_HEIGHT / 2)), str0.c_str());
+	//Play::DrawDebugText(Point2D((DISPLAY_WIDTH / 2) - 100, h + 140 + (DISPLAY_HEIGHT / 2)), str1.c_str());
+	//Play::DrawDebugText(Point2D((DISPLAY_WIDTH / 2) - 100, h + 160 + (DISPLAY_HEIGHT / 2)), str2.c_str());
+	//Play::DrawDebugText(Point2D((DISPLAY_WIDTH / 2) - 100, h + 180 + (DISPLAY_HEIGHT / 2)), str3.c_str());
+	//Play::DrawDebugText(Point2D((DISPLAY_WIDTH / 2) - 100, h + 200 + (DISPLAY_HEIGHT / 2)), str4.c_str());
 
 }
 
@@ -84,6 +83,8 @@ bool MainGameUpdate( float elapsedTime )
 	//Runs main Game Loop and Reset Loop
 	switch (i)
 	{
+
+
 	case State_Run:
 		Play::ClearDrawingBuffer(Play::cBlack);
 		//Check Collisions
@@ -103,11 +104,12 @@ bool MainGameUpdate( float elapsedTime )
 		Game::DrawPaddle(paddle);
 
 		//DrawScoreboard();
-		DrawDebugBoard();
 		DrawCurrentScore();
+		DrawScoreboard();
 
 		
 		break;
+
 
 	case State_Restart:
 		Play::ClearDrawingBuffer(Play::cBlue);
@@ -122,10 +124,6 @@ bool MainGameUpdate( float elapsedTime )
 		state = State_Run;
 		break;
 	}
-
-	//Show HighScores
-	DrawCurrentScore();
-	DrawDebugBoard();
 
 	Play::PresentDrawingBuffer();
 	return Play::KeyDown( VK_ESCAPE );
